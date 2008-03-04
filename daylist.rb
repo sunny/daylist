@@ -80,18 +80,19 @@ if File.basename($0) == File.basename(__FILE__)
   require 'highline/import'
 
   items = <<ITEMS
-Brushed teeth at least once
-Washed dishes at least once
+Brushed teeth twice
+Washed dishes
 Ate a veggie meal
 Took a shower
-Set the table
-Played less than 2 hours
-Emptied inbox before using PC
+Read 10 pages at least of current book
+Blogged
+Emptied inbox
+Stopped world hunger
 ITEMS
   items = items.split("\n")
 
   list = DayList.new(items)
-  puts "Yesterday you..."
+  puts "Yesterday you…"
   list.do_each { |item| agree("#{item} ? ") }
   puts "Results:"
   puts list
