@@ -3,7 +3,7 @@
 # get the percentage of stuff done. I've tried unit-testing my daily life this way.
 #
 # Example:
-#   > ruby daylist.rb 
+#   > ruby daylist.rb example.txt
 #   Yesterday you...
 #   Brushed teeth at least once ? y
 #   Washed dishes at least once ? n
@@ -65,36 +65,29 @@ class DayList
   def summary
     "#{passed.size} passed, #{failed.size} failed, #{percentage}%"
   end
-  
-  # Full list of answers
-  def to_s
-    passed_s = passed.lines { |task| " ✔ #{task}" } + "\n" + \
-    failed_s = failed.lines { |task| " ✗ #{task}" } + "\n" + \
-    unanswered_s = unanswered.lines  { |task| " ? #{task}" }
-  end  
 end
 
-# Example usage
-if File.basename($0) == File.basename(__FILE__)
-  require 'rubygems'
-  require 'highline/import'
+require 'rubygems'
+require 'highline/import'
 
-  items = <<ITEMS
-Brushed teeth twice
-Washed dishes
-Ate a veggie meal
-Took a shower
-Read 10 pages at least of current book
-Blogged
-Emptied inbox
-Stopped world hunger
-ITEMS
-  items = items.split("\n")
-
-  list = DayList.new(items)
-  puts "Yesterday you…"
-  list.do_each { |item| agree("#{item} ? ") }
-  puts "Results:"
-  puts list
-  puts list.summary
+class DayListReader
+  def initialize(file_name)
+    items = open(file_name).read.chomp.split("\n")
+    @list = DayList.new(items)
+  end
+  def ask
+    puts "You…"
+    @list.do_each { |item| agree("#{item} ? ") }
+    puts "Results:"
+    puts @list.passed.lines { |task| " ✔ #{task}" } unless @list.passed.empty?
+    puts @list.failed.lines { |task| " ✗ #{task}" } unless @list.failed.empty?
+    puts @list.unanswered.lines  { |task| " ? #{task}" } unless @list.unanswered.empty?
+    puts @list.summary
+  end
 end
+
+if $0 == __FILE__
+  abort "Usage: #{$0} filename" if ARGV.empty?
+  DayListReader.new(ARGV.last).ask
+end
+
