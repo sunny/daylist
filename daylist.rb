@@ -14,6 +14,8 @@
 #    ✗ Ate a veggie meal
 #   1 passed, 2 failed, 33%
 
+require 'rubygems'
+require 'highline/import'
 
 class Array
   def lines
@@ -34,19 +36,19 @@ class DayList
   end
 
   def passed
-    @list.select { |task| done?(task) }
+    @list.select { |task| @done[task] == true }
   end
-  
+
+  def failed
+    @list.select { |task| @done[task] == false }
+  end
+
   def unanswered
-    @list.select { |task| done?(task).nil? }
+    @list.select { |task| @done[task].nil? }
   end
   
   def answered
-    @list - unanswered
-  end
-  
-  def failed
-    @list - passed - unanswered
+    @list.reject { |task| @done[task].nil? }
   end
 
   def percentage
@@ -56,8 +58,7 @@ class DayList
   # Loops through all items
   # given block should return true or false for each item
   def do_each
-    # "!!" forces to boolean
-    @list.each { |item| @done[item] = !!yield(item) }
+    @list.each { |item| @done[item] = !!yield(item) } # "!!" forces to boolean
     self
   end
 
@@ -67,9 +68,6 @@ class DayList
   end
 end
 
-require 'rubygems'
-require 'highline/import'
-
 class DayListReader
   def initialize(file_name)
     items = open(file_name).read.chomp.split("\n")
@@ -77,7 +75,11 @@ class DayListReader
   end
   def ask
     puts "You…"
-    @list.do_each { |item| agree("#{item} ? ") }
+    begin
+      @list.do_each { |item| agree("#{item} ? ", true) }
+    rescue Interrupt
+      puts
+    end
     puts "Results:"
     puts @list.passed.lines { |task| " ✔ #{task}" } unless @list.passed.empty?
     puts @list.failed.lines { |task| " ✗ #{task}" } unless @list.failed.empty?
