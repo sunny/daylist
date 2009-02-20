@@ -27,7 +27,7 @@ class DayList
   attr_reader :done, :list
 
   def initialize(list)
-    @list = list.uniq
+    @list = list.reject { |item| item.empty? }.uniq
     @done = {}
   end
 
@@ -70,7 +70,7 @@ end
 
 class DayListReader
   def initialize(file_name)
-    items = open(file_name).read.chomp.split("\n")
+    items = open(file_name).read.gsub(/\w*#.*$/, '').chomp.split("\n")
     @list = DayList.new(items)
   end
   def ask
