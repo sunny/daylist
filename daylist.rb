@@ -76,7 +76,6 @@ class DayListReader
     @list = DayList.new(items)
   end
   def ask
-    puts "You…"
     begin
       @list.do_each { |item| agree("#{item} ? ", true) }
     rescue Interrupt
