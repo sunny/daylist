@@ -52,7 +52,9 @@ class DayList
   end
 
   def percentage
-    ((passed.size.to_f / answered.size) * 100).to_i
+    total_answered = answered.size.to_f
+    return 0 if total_answered == 0
+    ((passed.size / total_answered) * 100).to_i
   end
 
   # Loops through all items
