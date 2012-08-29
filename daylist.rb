@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 # Daylist
 # A small checklister for personnal use. Launch it, answer each question and
 # get the percentage of stuff done. I've tried unit-testing my daily life this way.
