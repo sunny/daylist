@@ -28,3 +28,16 @@ Results:
  ✗ Ate a veggie meal
 1 passed, 2 failed, 33%
 ```
+
+Create a list
+-------------
+
+Fill a text file with todo items. Use `#` for comments. Example :
+
+    # My weekly list!
+    Went to the gym
+    Helped an open-source project
+    Called Mom
+
+Another example is the big [Cleen Sweep|http://betterme.org/cleansweep.html],
+attached as `cleensweep.txt`.
